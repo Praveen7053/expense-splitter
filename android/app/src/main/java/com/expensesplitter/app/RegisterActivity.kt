@@ -38,12 +38,13 @@ class RegisterActivity : AppCompatActivity() {
                         call: Call<RegisterResponse>,
                         response: Response<RegisterResponse>
                     ) {
-                        if (response.isSuccessful && response.body() != null) {
+                        Toast.makeText(
+                            this@RegisterActivity,
+                            "Response code: ${response.code()}",
+                            Toast.LENGTH_LONG
+                        ).show()
 
-                            val token = response.body()!!.token
-
-                            val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
-                            sharedPref.edit().putString("token", token).apply()
+                        if (response.isSuccessful) {
 
                             Toast.makeText(
                                 this@RegisterActivity,
@@ -51,14 +52,14 @@ class RegisterActivity : AppCompatActivity() {
                                 Toast.LENGTH_SHORT
                             ).show()
 
-                            val intent = Intent(this@RegisterActivity, HomeActivity::class.java)
+                            val intent = Intent(this@RegisterActivity, MainActivity::class.java)
                             startActivity(intent)
                             finish()
 
                         } else {
                             Toast.makeText(
                                 this@RegisterActivity,
-                                "Registration failed: ${response.code()}",
+                                "Registration failed",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }

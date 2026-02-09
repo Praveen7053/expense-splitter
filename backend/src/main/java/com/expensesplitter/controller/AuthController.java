@@ -3,6 +3,7 @@ package com.expensesplitter.controller;
 import com.expensesplitter.dto.LoginRequest;
 import com.expensesplitter.dto.LoginResponse;
 import com.expensesplitter.dto.RegisterRequest;
+import com.expensesplitter.dto.RegisterResponse;
 import com.expensesplitter.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +18,9 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@Valid @RequestBody RegisterRequest request) {
+    public RegisterResponse register(@RequestBody RegisterRequest request) {
         authService.register(request);
-        return ResponseEntity.ok("User registered successfully");
+        return new RegisterResponse("User registered successfully");
     }
 
     @PostMapping("/login")
