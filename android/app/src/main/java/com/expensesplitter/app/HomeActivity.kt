@@ -38,7 +38,28 @@ class HomeActivity : AppCompatActivity() {
                     true
                 }
 
-                else -> true
+                R.id.nav_add -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainer, AddExpenseFragment())
+                        .commit()
+                    true
+                }
+
+                R.id.nav_activity -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainer, ActivityFragment())
+                        .commit()
+                    true
+                }
+
+                R.id.nav_profile -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainer, ProfileFragment())
+                        .commit()
+                    true
+                }
+
+                else -> false
             }
         }
 
