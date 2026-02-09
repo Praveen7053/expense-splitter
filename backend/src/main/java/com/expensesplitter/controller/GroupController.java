@@ -2,6 +2,7 @@ package com.expensesplitter.controller;
 
 import com.expensesplitter.dto.AddMemberRequest;
 import com.expensesplitter.dto.CreateGroupRequest;
+import com.expensesplitter.dto.GroupListResponse;
 import com.expensesplitter.dto.MessageResponse;
 import com.expensesplitter.model.GroupMember;
 import com.expensesplitter.service.GroupService;
@@ -19,7 +20,7 @@ public class GroupController {
 
     private final GroupService groupService;
 
-    @PostMapping
+    @PostMapping("/createGroup")
     public MessageResponse createGroup(@Valid @RequestBody CreateGroupRequest request, Authentication authentication) {
         groupService.createGroup(request, authentication.getName());
         return new MessageResponse("Group created successfully");
@@ -34,8 +35,8 @@ public class GroupController {
         return "Member added successfully";
     }
 
-    @GetMapping("/my")
-    public List<GroupMember> myGroups(Authentication authentication) {
+    @GetMapping("/getGroupList")
+    public List<GroupListResponse> myGroups(Authentication authentication) {
         return groupService.myGroups(authentication.getName());
     }
 }

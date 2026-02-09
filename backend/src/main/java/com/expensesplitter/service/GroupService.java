@@ -2,6 +2,7 @@ package com.expensesplitter.service;
 
 import com.expensesplitter.dto.AddMemberRequest;
 import com.expensesplitter.dto.CreateGroupRequest;
+import com.expensesplitter.dto.GroupListResponse;
 import com.expensesplitter.model.GroupEntity;
 import com.expensesplitter.model.GroupMember;
 import com.expensesplitter.model.UserExpensesSplitter;
@@ -76,10 +77,18 @@ public class GroupService {
         groupMemberRepository.save(member);
     }
 
-    public List<GroupMember> myGroups(String email) {
+    public List<GroupListResponse> myGroups(String email) {
         UserExpensesSplitter user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        return groupMemberRepository.findByUserId(user.getId());
+        List<GroupMember> memberships = groupMemberRepository.findByUserId(user.getId());
+
+        return memberships.stream()
+                .map(m -> new GroupListResponse(
+                        m.getGroup().getId(),
+                        m.getGroup().getName()
+                ))
+                .toList();
     }
+
 }
