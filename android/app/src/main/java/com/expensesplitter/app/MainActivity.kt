@@ -12,6 +12,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import android.content.Intent
+import android.widget.TextView
 
 
 class MainActivity : AppCompatActivity() {
@@ -23,6 +24,13 @@ class MainActivity : AppCompatActivity() {
         val etEmail = findViewById<EditText>(R.id.etEmail)
         val etPassword = findViewById<EditText>(R.id.etPassword)
         val btnLogin = findViewById<Button>(R.id.btnLogin)
+
+        val tvRegister = findViewById<TextView>(R.id.tvRegister)
+        tvRegister.setOnClickListener {
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
+        }
+
 
         btnLogin.setOnClickListener {
 
