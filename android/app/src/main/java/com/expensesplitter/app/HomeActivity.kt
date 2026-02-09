@@ -12,13 +12,10 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        val tvWelcome = findViewById<TextView>(R.id.tvWelcome)
         val logout = findViewById<ImageView>(R.id.imgLogout)
 
         val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
         val email = sharedPref.getString("email", "User")
-
-        tvWelcome.text = email
 
         logout.setOnClickListener {
             val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
