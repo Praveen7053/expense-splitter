@@ -12,6 +12,7 @@ import com.expensesplitter.app.network.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.widget.TextView
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -23,6 +24,7 @@ class RegisterActivity : AppCompatActivity() {
         val etEmail = findViewById<EditText>(R.id.etEmail)
         val etPassword = findViewById<EditText>(R.id.etPassword)
         val btnRegister = findViewById<Button>(R.id.btnRegister)
+        val tvLogin = findViewById<TextView>(R.id.tvLogin)
 
         btnRegister.setOnClickListener {
 
@@ -73,6 +75,11 @@ class RegisterActivity : AppCompatActivity() {
                         ).show()
                     }
                 })
+        }
+
+        tvLogin.setOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
         }
     }
 }
