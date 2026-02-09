@@ -34,7 +34,7 @@ class RegisterActivity : AppCompatActivity() {
 
             val request = RegisterRequest(name, email, password)
 
-            RetrofitClient.apiService.register(request)
+            RetrofitClient.getApiService(this).register(request)
                 .enqueue(object : Callback<RegisterResponse> {
                     override fun onResponse(
                         call: Call<RegisterResponse>,

@@ -2,6 +2,7 @@ package com.expensesplitter.controller;
 
 import com.expensesplitter.dto.AddMemberRequest;
 import com.expensesplitter.dto.CreateGroupRequest;
+import com.expensesplitter.dto.MessageResponse;
 import com.expensesplitter.model.GroupMember;
 import com.expensesplitter.service.GroupService;
 import jakarta.validation.Valid;
@@ -19,11 +20,9 @@ public class GroupController {
     private final GroupService groupService;
 
     @PostMapping
-    public String createGroup(@Valid @RequestBody CreateGroupRequest request,
-                              Authentication authentication) {
-
+    public MessageResponse createGroup(@Valid @RequestBody CreateGroupRequest request, Authentication authentication) {
         groupService.createGroup(request, authentication.getName());
-        return "Group created successfully";
+        return new MessageResponse("Group created successfully");
     }
 
     @PostMapping("/{groupId}/members")

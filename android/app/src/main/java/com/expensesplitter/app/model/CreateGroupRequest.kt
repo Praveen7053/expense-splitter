@@ -1,4 +1,5 @@
 package com.expensesplitter.app.model
 
-class CreateGroupRequest {
-}
+data class CreateGroupRequest(
+    val name: String
+)

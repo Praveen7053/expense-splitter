@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
 
             val request = LoginRequest(email, password)
 
-            RetrofitClient.apiService.login(request)
+            RetrofitClient.getApiService(this).login(request)
                 .enqueue(object : Callback<LoginResponse> {
                     override fun onResponse(
                         call: Call<LoginResponse>,
