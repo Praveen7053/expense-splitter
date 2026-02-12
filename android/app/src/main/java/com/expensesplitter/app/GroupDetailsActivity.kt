@@ -12,6 +12,7 @@ class GroupDetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_group_details)
 
+        val groupId = intent.getLongExtra("GROUP_ID", -1)
         val groupName = intent.getStringExtra("GROUP_NAME")
 
         val tvTitle = findViewById<TextView>(R.id.tvGroupTitle)
@@ -22,9 +23,11 @@ class GroupDetailsActivity : AppCompatActivity() {
         }
 
         findViewById<ImageView>(R.id.btnAddMember).setOnClickListener {
-            val intent = Intent(this, AddMemberActivity::class.java)
-            intent.putExtra("GROUP_ID", intent.getLongExtra("GROUP_ID", -1))
-            startActivity(intent)
+
+            val addIntent = Intent(this, AddMemberActivity::class.java)
+            addIntent.putExtra("GROUP_ID", groupId)
+            addIntent.putExtra("GROUP_NAME", groupName)
+            startActivity(addIntent)
         }
     }
 }

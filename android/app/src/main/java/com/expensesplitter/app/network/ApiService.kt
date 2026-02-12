@@ -2,6 +2,7 @@ package com.expensesplitter.app.network
 
 import com.expensesplitter.app.model.CreateGroupRequest
 import com.expensesplitter.app.model.GroupMember
+import com.expensesplitter.app.model.GroupMemberResponse
 import com.expensesplitter.app.model.LoginRequest
 import com.expensesplitter.app.model.LoginResponse
 import com.expensesplitter.app.model.MessageResponse
@@ -11,6 +12,7 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface ApiService {
 
@@ -25,6 +27,12 @@ interface ApiService {
 
     @GET("api/groups/getGroupList")
     fun getGroupList(): Call<List<GroupMember>>
+
+    @GET("api/groups/{groupId}/members")
+    fun getGroupMembers(
+        @Path("groupId") groupId: Long
+    ): Call<List<GroupMemberResponse>>
+
 
 
 }

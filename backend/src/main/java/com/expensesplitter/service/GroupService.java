@@ -3,6 +3,7 @@ package com.expensesplitter.service;
 import com.expensesplitter.dto.AddMemberRequest;
 import com.expensesplitter.dto.CreateGroupRequest;
 import com.expensesplitter.dto.GroupListResponse;
+import com.expensesplitter.dto.GroupMemberResponse;
 import com.expensesplitter.model.GroupEntity;
 import com.expensesplitter.model.GroupMember;
 import com.expensesplitter.model.UserExpensesSplitter;
@@ -90,5 +91,18 @@ public class GroupService {
                 ))
                 .toList();
     }
+
+    public List<GroupMemberResponse> getMembers(Long groupId, String email) {
+        List<GroupMember> members = groupMemberRepository.findByGroup_Id(groupId);
+        return members.stream()
+                .map(m -> new GroupMemberResponse(
+                        m.getUser().getId(),
+                        m.getUser().getName(),
+                        m.getUser().getEmail(),
+                        m.getRole()
+                ))
+                .toList();
+    }
+
 
 }

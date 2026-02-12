@@ -1,9 +1,6 @@
 package com.expensesplitter.controller;
 
-import com.expensesplitter.dto.AddMemberRequest;
-import com.expensesplitter.dto.CreateGroupRequest;
-import com.expensesplitter.dto.GroupListResponse;
-import com.expensesplitter.dto.MessageResponse;
+import com.expensesplitter.dto.*;
 import com.expensesplitter.model.GroupMember;
 import com.expensesplitter.service.GroupService;
 import jakarta.validation.Valid;
@@ -39,4 +36,10 @@ public class GroupController {
     public List<GroupListResponse> myGroups(Authentication authentication) {
         return groupService.myGroups(authentication.getName());
     }
+
+    @GetMapping("/{groupId}/members")
+    public List<GroupMemberResponse> getMembers(@PathVariable Long groupId,Authentication authentication) {
+        return groupService.getMembers(groupId, authentication.getName());
+    }
+
 }
