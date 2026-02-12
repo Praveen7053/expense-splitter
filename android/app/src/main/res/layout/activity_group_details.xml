@@ -6,32 +6,31 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_gradient">
 
-    <!-- Main Content -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <!-- 🔹 Top Header -->
+        <!-- 🔹 Header -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:gravity="center_vertical"
-            android:paddingHorizontal="20dp">
+            android:layout_height="60dp"
+            android:gravity="center_vertical">
 
             <ImageView
                 android:id="@+id/btnBack"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:src="@drawable/ic_back"
-                android:tint="#333333"/>
+                app:tint="#333333"/>
 
             <TextView
                 android:id="@+id/tvGroupTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="Weekend Getaway"
+                android:text="Manali Trip"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="#333333"/>
@@ -42,7 +41,6 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:paddingHorizontal="16dp"
             android:fillViewport="true">
 
             <LinearLayout
@@ -62,9 +60,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
                         android:gravity="center"
-                        android:padding="16dp">
+                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -85,21 +82,21 @@
 
                 </androidx.cardview.widget.CardView>
 
-                <!-- Members Header -->
+                <!-- 🔹 Members Header -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
 
                     <TextView
+                        android:id="@+id/tvMemberCount"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Members"
+                        android:text="Members (5)"
                         android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="#333333"/>
+                        android:textStyle="bold"/>
 
                     <ImageView
                         android:id="@+id/btnAddMember"
@@ -109,81 +106,37 @@
                         app:tint="#7E57C2"/>
                 </LinearLayout>
 
-                <!-- Members List -->
+                <!-- 🔥 Horizontal Members Recycler -->
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerGroupMembers"
+                    android:id="@+id/recyclerMembersHorizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:nestedScrollingEnabled="false"
-                    android:layout_marginBottom="20dp"/>
+                    android:layout_height="80dp"
+                    android:layout_marginBottom="24dp"
+                    android:overScrollMode="never"
+                    android:clipToPadding="false"
+                    android:paddingStart="4dp"/>
 
-                <!-- Expenses Title -->
+                <!-- 🔹 Expenses Title -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Expenses"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:textColor="#333333"
                     android:layout_marginBottom="12dp"/>
 
-                <!-- Expense Card -->
-                <androidx.cardview.widget.CardView
+                <!-- 🔥 Expenses Recycler -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerExpenses"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:layout_marginBottom="20dp"
-                    app:cardCornerRadius="18dp"
-                    app:cardElevation="4dp"
-                    app:cardBackgroundColor="#FFFFFF">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"
-                        android:padding="16dp">
-
-                        <View
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:background="@drawable/bg_circle_icon"
-                            android:layout_marginEnd="16dp"/>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Dinner"
-                                android:textSize="16sp"
-                                android:textStyle="bold"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Paid by Alex • Jul 10"
-                                android:textSize="13sp"
-                                android:textColor="#777777"/>
-                        </LinearLayout>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="₹125"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:textColor="#333333"/>
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"/>
 
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
 
-    <!-- Floating Add Expense Button -->
+    <!-- 🔥 Floating Add Expense -->
     <Button
         android:id="@+id/btnAddExpense"
         android:layout_width="200dp"

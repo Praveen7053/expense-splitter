@@ -14,9 +14,12 @@ import com.expensesplitter.app.network.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 class GroupDetailsActivity : AppCompatActivity() {
 
-    private lateinit var recyclerGroupMembers: RecyclerView
+    private lateinit var recyclerMembers: RecyclerView
+    private lateinit var tvMemberCount: TextView
+
     private var groupId: Long = -1
 
     override fun onResume() {
@@ -31,23 +34,23 @@ class GroupDetailsActivity : AppCompatActivity() {
         groupId = intent.getLongExtra("GROUP_ID", -1)
         val groupName = intent.getStringExtra("GROUP_NAME")
 
-        val tvTitle = findViewById<TextView>(R.id.tvGroupTitle)
-        tvTitle.text = groupName
+        findViewById<TextView>(R.id.tvGroupTitle).text = groupName
 
         findViewById<ImageView>(R.id.btnBack).setOnClickListener {
             finish()
         }
 
         findViewById<ImageView>(R.id.btnAddMember).setOnClickListener {
-
             val addIntent = Intent(this, AddMemberActivity::class.java)
             addIntent.putExtra("GROUP_ID", groupId)
             addIntent.putExtra("GROUP_NAME", groupName)
             startActivity(addIntent)
         }
 
-        recyclerGroupMembers = findViewById(R.id.recyclerGroupMembers)
-        recyclerGroupMembers.layoutManager = LinearLayoutManager(this)
+        tvMemberCount = findViewById(R.id.tvMemberCount)
+
+        recyclerMembers = findViewById(R.id.recyclerMembersHorizontal)
+        recyclerMembers.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
         loadGroupMembers()
     }
@@ -67,8 +70,9 @@ class GroupDetailsActivity : AppCompatActivity() {
 
                         val members = response.body()?.data ?: emptyList()
 
-                        recyclerGroupMembers.adapter =
-                            MemberAdapter(members)
+                        recyclerMembers.adapter = MemberHorizontalAdapter(members)
+
+                        tvMemberCount.text = "Members (${members.size})"
 
                     } else {
 
@@ -92,5 +96,4 @@ class GroupDetailsActivity : AppCompatActivity() {
                 }
             })
     }
-
 }
