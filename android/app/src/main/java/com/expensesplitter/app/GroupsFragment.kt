@@ -2,12 +2,14 @@ package com.expensesplitter.app
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.expensesplitter.app.model.GroupMember
 import com.expensesplitter.app.network.RetrofitClient
@@ -15,8 +17,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 class GroupsFragment : Fragment() {
-
-    private lateinit var tvEmpty: TextView
     private lateinit var recyclerGroups: RecyclerView
 
     override fun onCreateView(
@@ -28,8 +28,9 @@ class GroupsFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_groups, container, false)
 
         val btnCreateGroup = view.findViewById<Button>(R.id.btnCreateGroup)
-        tvEmpty = view.findViewById(R.id.tvEmpty)
         recyclerGroups = view.findViewById(R.id.recyclerGroups)
+
+        recyclerGroups.layoutManager = LinearLayoutManager(requireContext())
 
         btnCreateGroup.setOnClickListener {
             startActivity(Intent(requireContext(), CreateGroupActivity::class.java))
@@ -51,22 +52,22 @@ class GroupsFragment : Fragment() {
                 ) {
                     if (response.isSuccessful) {
                         val groups = response.body()
-
+                        Log.d("GROUP_DEBUG", "Total groups: ${groups?.size}")
                         if (groups.isNullOrEmpty()) {
-                            tvEmpty.visibility = View.VISIBLE
                             recyclerGroups.visibility = View.GONE
                         } else {
-                            tvEmpty.visibility = View.GONE
                             recyclerGroups.visibility = View.VISIBLE
                             recyclerGroups.adapter = GroupAdapter(groups)
+                            recyclerGroups.setHasFixedSize(true)
+                            recyclerGroups.overScrollMode = View.OVER_SCROLL_NEVER
                         }
                     } else {
-                        tvEmpty.text = "Failed to load groups"
+
                     }
                 }
 
                 override fun onFailure(call: Call<List<GroupMember>>, t: Throwable) {
-                    tvEmpty.text = "Error loading groups"
+
                 }
             })
     }

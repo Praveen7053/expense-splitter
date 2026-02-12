@@ -45,14 +45,9 @@
             app:tint="#333333"/>
     </LinearLayout>
 
+    <!-- Fragment Container -->
     <FrameLayout
         android:id="@+id/fragmentContainer"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
-
-    <!-- Spacer to push bottom bar down -->
-    <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>
