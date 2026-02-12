@@ -13,6 +13,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import android.content.Intent
 import android.widget.TextView
+import com.expensesplitter.app.model.apiResponse.ApiResponse
 
 
 class MainActivity : AppCompatActivity() {
@@ -40,13 +41,13 @@ class MainActivity : AppCompatActivity() {
             val request = LoginRequest(email, password)
 
             RetrofitClient.getApiService(this).login(request)
-                .enqueue(object : Callback<LoginResponse> {
+                .enqueue(object : Callback<ApiResponse<LoginResponse>> {
                     override fun onResponse(
-                        call: Call<LoginResponse>,
-                        response: Response<LoginResponse>
+                        call: Call<ApiResponse<LoginResponse>>,
+                        response: Response<ApiResponse<LoginResponse>>
                     ) {
-                        if (response.isSuccessful) {
-                            val token = response.body()?.token
+                        if (response.isSuccessful && response.body()?.success == true) {
+                            val token = response.body()?.data?.token
                             val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
                             sharedPref.edit()
                                 .putString("token", token)
@@ -59,13 +60,16 @@ class MainActivity : AppCompatActivity() {
                         } else {
                             Toast.makeText(
                                 this@MainActivity,
-                                "Login failed",
+                                response.body()?.message ?: "Login failed",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
                     }
 
-                    override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                    override fun onFailure(
+                        call: Call<ApiResponse<LoginResponse>>,
+                        t: Throwable
+                    ) {
                         Toast.makeText(
                             this@MainActivity,
                             "Error: ${t.message}",

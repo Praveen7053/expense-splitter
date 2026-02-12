@@ -1,13 +1,10 @@
 package com.expensesplitter.controller;
 
-import com.expensesplitter.dto.LoginRequest;
-import com.expensesplitter.dto.LoginResponse;
-import com.expensesplitter.dto.RegisterRequest;
-import com.expensesplitter.dto.RegisterResponse;
+import com.expensesplitter.dto.*;
+import com.expensesplitter.dto.apiResponse.ApiResponse;
 import com.expensesplitter.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,17 +15,33 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public RegisterResponse register(@RequestBody RegisterRequest request) {
+    public ApiResponse<RegisterResponse> register(
+            @Valid @RequestBody RegisterRequest request) {
+
         authService.register(request);
-        return new RegisterResponse("User registered successfully");
+
+        RegisterResponse response =
+                new RegisterResponse("User registered successfully");
+
+        return new ApiResponse<>(
+                true,
+                "Registration successful",
+                response
+        );
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+    public ApiResponse<LoginResponse> login(
+            @Valid @RequestBody LoginRequest request) {
 
         String token = authService.login(request);
-        return ResponseEntity.ok(new LoginResponse(token));
+
+        LoginResponse response = new LoginResponse(token);
+
+        return new ApiResponse<>(
+                true,
+                "Login successful",
+                response
+        );
     }
-
-
 }

@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.expensesplitter.app.model.CreateGroupRequest
 import com.expensesplitter.app.model.MessageResponse
+import com.expensesplitter.app.model.apiResponse.ApiResponse
 import com.expensesplitter.app.network.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -39,32 +40,38 @@ class CreateGroupActivity : AppCompatActivity() {
             val request = CreateGroupRequest(name)
 
             RetrofitClient.getApiService(this)
-                .createGroup(request).enqueue(object : Callback<MessageResponse> {
+                .createGroup(request)
+                .enqueue(object : Callback<ApiResponse<Void>> {
 
                     override fun onResponse(
-                        call: Call<MessageResponse>,
-                        response: Response<MessageResponse>
+                        call: Call<ApiResponse<Void>>,
+                        response: Response<ApiResponse<Void>>
                     ) {
-                        if (response.isSuccessful) {
+
+                        if (response.isSuccessful && response.body()?.success == true) {
+
                             val message =
-                                response.body()?.message ?: "Group created"
+                                response.body()?.message ?: "Group created successfully"
+
                             Toast.makeText(
                                 this@CreateGroupActivity,
                                 message,
                                 Toast.LENGTH_SHORT
                             ).show()
+
                             finish()
+
                         } else {
                             Toast.makeText(
                                 this@CreateGroupActivity,
-                                "Failed to create group",
+                                response.body()?.message ?: "Failed to create group",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
                     }
 
                     override fun onFailure(
-                        call: Call<MessageResponse>,
+                        call: Call<ApiResponse<Void>>,
                         t: Throwable
                     ) {
                         Toast.makeText(

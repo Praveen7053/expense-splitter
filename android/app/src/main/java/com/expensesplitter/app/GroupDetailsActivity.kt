@@ -4,10 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.expensesplitter.app.model.GroupMemberResponse
+import com.expensesplitter.app.model.apiResponse.ApiResponse
 import com.expensesplitter.app.network.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -16,6 +18,11 @@ class GroupDetailsActivity : AppCompatActivity() {
 
     private lateinit var recyclerGroupMembers: RecyclerView
     private var groupId: Long = -1
+
+    override fun onResume() {
+        super.onResume()
+        loadGroupMembers()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,22 +56,39 @@ class GroupDetailsActivity : AppCompatActivity() {
 
         RetrofitClient.getApiService(this)
             .getGroupMembers(groupId)
-            .enqueue(object : Callback<List<GroupMemberResponse>> {
+            .enqueue(object : Callback<ApiResponse<List<GroupMemberResponse>>> {
 
                 override fun onResponse(
-                    call: Call<List<GroupMemberResponse>>,
-                    response: Response<List<GroupMemberResponse>>
+                    call: Call<ApiResponse<List<GroupMemberResponse>>>,
+                    response: Response<ApiResponse<List<GroupMemberResponse>>>
                 ) {
-                    if (response.isSuccessful) {
+
+                    if (response.isSuccessful && response.body()?.success == true) {
+
+                        val members = response.body()?.data ?: emptyList()
+
                         recyclerGroupMembers.adapter =
-                            MemberAdapter(response.body() ?: emptyList())
+                            MemberAdapter(members)
+
+                    } else {
+
+                        Toast.makeText(
+                            this@GroupDetailsActivity,
+                            response.body()?.message ?: "Failed to load members",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
 
                 override fun onFailure(
-                    call: Call<List<GroupMemberResponse>>,
+                    call: Call<ApiResponse<List<GroupMemberResponse>>>,
                     t: Throwable
                 ) {
+                    Toast.makeText(
+                        this@GroupDetailsActivity,
+                        "Error: ${t.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             })
     }
