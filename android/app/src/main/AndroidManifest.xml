@@ -30,6 +30,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".CreateGroupActivity" />
+        <activity android:name=".GroupDetailsActivity" />
+        <activity android:name=".AddMemberActivity" />
     </application>
 
 </manifest>

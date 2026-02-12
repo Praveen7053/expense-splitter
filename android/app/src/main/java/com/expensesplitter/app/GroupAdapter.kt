@@ -8,11 +8,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.expensesplitter.app.model.GroupMember
 
 class GroupAdapter(
-    private val groups: List<GroupMember>
+    private val groups: List<GroupMember>,
+    private val onClick: (GroupMember) -> Unit
 ) : RecyclerView.Adapter<GroupAdapter.GroupViewHolder>() {
 
     class GroupViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val tvConsideration: TextView = view.findViewById(R.id.tvGroupName)
+        val tvGroupName: TextView = view.findViewById(R.id.tvGroupName)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroupViewHolder {
@@ -23,7 +24,11 @@ class GroupAdapter(
 
     override fun onBindViewHolder(holder: GroupViewHolder, position: Int) {
         val group = groups[position]
-        holder.tvConsideration.text = group.name
+        holder.tvGroupName.text = group.name
+
+        holder.itemView.setOnClickListener {
+            onClick(group)
+        }
     }
 
     override fun getItemCount(): Int = groups.size

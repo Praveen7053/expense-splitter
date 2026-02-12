@@ -57,7 +57,14 @@ class GroupsFragment : Fragment() {
                             recyclerGroups.visibility = View.GONE
                         } else {
                             recyclerGroups.visibility = View.VISIBLE
-                            recyclerGroups.adapter = GroupAdapter(groups)
+                            recyclerGroups.adapter = GroupAdapter(groups) { group ->
+
+                                val intent = Intent(requireContext(), GroupDetailsActivity::class.java)
+                                intent.putExtra("GROUP_ID", group.id)
+                                intent.putExtra("GROUP_NAME", group.name)
+                                startActivity(intent)
+                            }
+
                             recyclerGroups.setHasFixedSize(true)
                             recyclerGroups.overScrollMode = View.OVER_SCROLL_NEVER
                         }
