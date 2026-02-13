@@ -4,6 +4,7 @@ import com.expensesplitter.common.response.ApiResponse;
 import com.expensesplitter.expense.dto.BalanceResponse;
 import com.expensesplitter.expense.dto.MyBalanceResponse;
 import com.expensesplitter.expense.service.BalanceService;
+import com.expensesplitter.settlement.dto.SettlementSummaryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -42,5 +43,18 @@ public class BalanceController {
                 balanceService.getMyBalance(groupId, authentication.getName())
         );
     }
+
+    @GetMapping("/settlement-summary")
+    public ApiResponse<List<SettlementSummaryResponse>> getSettlementSummary(
+            @PathVariable Long groupId,
+            Authentication authentication) {
+
+        return new ApiResponse<>(
+                true,
+                "Settlement summary generated",
+                balanceService.getSettlementSummary(groupId, authentication.getName())
+        );
+    }
+
 
 }
