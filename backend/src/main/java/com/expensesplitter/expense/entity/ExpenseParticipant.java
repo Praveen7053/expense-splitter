@@ -4,9 +4,9 @@ import com.expensesplitter.common.baseEntity.BaseEntity;
 import com.expensesplitter.user.entity.UserExpensesSplitter;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter

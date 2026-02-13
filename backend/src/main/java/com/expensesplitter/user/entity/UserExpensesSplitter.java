@@ -27,8 +27,6 @@ public class UserExpensesSplitter extends BaseEntity {
 
     @Column(nullable = false)
     private String password;
-
-    private LocalDateTime createdAt;
 }
 
 

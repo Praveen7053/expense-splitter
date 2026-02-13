@@ -5,6 +5,7 @@ import com.expensesplitter.group.entity.GroupEntity;
 import com.expensesplitter.user.entity.UserExpensesSplitter;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -40,5 +41,8 @@ public class Settlement extends BaseEntity {
 
     private LocalDate settlementDate;
 
-    private LocalDateTime createdAt;
+    @PrePersist
+    protected void onCreate() {
+        this.settlementDate = LocalDate.from(LocalDateTime.now());
+    }
 }

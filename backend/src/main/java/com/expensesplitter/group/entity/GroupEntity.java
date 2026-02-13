@@ -5,6 +5,7 @@ import com.expensesplitter.expense.entity.Expense;
 import com.expensesplitter.user.entity.UserExpensesSplitter;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,10 +30,6 @@ public class GroupEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", nullable = false)
     private UserExpensesSplitter owner;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     private List<GroupMember> members;

@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.*;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // 1️⃣ Handle custom BadRequestException
     @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<ApiResponse<Object>> handleBadRequest(BadRequestException ex) {
+    public ResponseEntity<ApiResponse<String>> handleBadRequest(BadRequestException ex) {
 
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(new ApiResponse<>(false, ex.getMessage(), null));
+        return new ResponseEntity<>(
+                new ApiResponse<>(false, ex.getMessage(), null),
+                HttpStatus.BAD_REQUEST
+        );
     }
 
     // 2️⃣ Handle @Valid DTO validation errors
@@ -35,13 +35,13 @@ public class GlobalExceptionHandler {
                 .body(new ApiResponse<>(false, errorMessage, null));
     }
 
-    // 3️⃣ Handle generic exceptions (fallback)
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<Object>> handleGeneralException(Exception ex) {
+    public ResponseEntity<ApiResponse<String>> handleGeneric(Exception ex) {
 
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ApiResponse<>(false, "Something went wrong", null));
+        return new ResponseEntity<>(
+                new ApiResponse<>(false, ex.getMessage(), null),
+                HttpStatus.INTERNAL_SERVER_ERROR
+        );
     }
 }
 

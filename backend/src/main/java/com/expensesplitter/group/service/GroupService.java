@@ -34,7 +34,6 @@ public class GroupService {
         GroupEntity group = GroupEntity.builder()
                 .name(request.getName())
                 .owner(owner)
-                .createdAt(LocalDateTime.now())
                 .build();
 
         groupRepository.save(group);
