@@ -5,11 +5,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.expensesplitter.app.model.GroupMember
+import com.expensesplitter.app.model.GroupListResponse
 
 class GroupAdapter(
-    private val groups: List<GroupMember>,
-    private val onClick: (GroupMember) -> Unit
+    private val groups: List<GroupListResponse>,
+    private val onClick: (GroupListResponse) -> Unit
 ) : RecyclerView.Adapter<GroupAdapter.GroupViewHolder>() {
 
     class GroupViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -24,7 +24,7 @@ class GroupAdapter(
 
     override fun onBindViewHolder(holder: GroupViewHolder, position: Int) {
         val group = groups[position]
-        holder.tvGroupName.text = group.name
+        holder.tvGroupName.text = group.groupName
 
         holder.itemView.setOnClickListener {
             onClick(group)

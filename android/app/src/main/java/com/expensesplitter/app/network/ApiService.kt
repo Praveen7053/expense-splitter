@@ -2,7 +2,7 @@ package com.expensesplitter.app.network
 
 import com.expensesplitter.app.model.AddMemberRequest
 import com.expensesplitter.app.model.CreateGroupRequest
-import com.expensesplitter.app.model.GroupMember
+import com.expensesplitter.app.model.GroupListResponse
 import com.expensesplitter.app.model.GroupMemberResponse
 import com.expensesplitter.app.model.LoginRequest
 import com.expensesplitter.app.model.LoginResponse
@@ -19,12 +19,12 @@ interface ApiService {
 
     // ---------------- AUTH ----------------
 
-    @POST("/api/auth/login")
+    @POST("api/auth/login")
     fun login(
         @Body request: LoginRequest
     ): Call<ApiResponse<LoginResponse>>
 
-    @POST("/api/auth/register")
+    @POST("api/auth/register")
     fun register(
         @Body request: RegisterRequest
     ): Call<ApiResponse<RegisterResponse>>
@@ -32,14 +32,13 @@ interface ApiService {
 
     // ---------------- GROUP ----------------
 
-    @POST("api/groups/createGroup")
+    @POST("api/groups")
     fun createGroup(
         @Body request: CreateGroupRequest
     ): Call<ApiResponse<Void>>
 
-    @GET("api/groups/getGroupList")
-    fun getGroupList(
-    ): Call<ApiResponse<List<GroupMember>>>   // (we will fix this model later if needed)
+    @GET("api/groups")
+    fun getGroupList(): Call<ApiResponse<List<GroupListResponse>>>
 
     @GET("api/groups/{groupId}/members")
     fun getGroupMembers(
@@ -51,5 +50,4 @@ interface ApiService {
         @Path("groupId") groupId: Long,
         @Body request: AddMemberRequest
     ): Call<ApiResponse<Void>>
-
 }

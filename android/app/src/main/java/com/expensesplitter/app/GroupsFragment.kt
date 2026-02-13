@@ -11,7 +11,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.expensesplitter.app.model.GroupMember
+import com.expensesplitter.app.model.GroupListResponse
 import com.expensesplitter.app.model.apiResponse.ApiResponse
 import com.expensesplitter.app.network.RetrofitClient
 import retrofit2.Call
@@ -19,23 +19,26 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class GroupsFragment : Fragment() {
-    private lateinit var recyclerGroups: RecyclerView
+
+    private var recyclerGroups: RecyclerView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         val view = inflater.inflate(R.layout.fragment_groups, container, false)
 
         val btnCreateGroup = view.findViewById<Button>(R.id.btnCreateGroup)
         recyclerGroups = view.findViewById(R.id.recyclerGroups)
 
-        recyclerGroups.layoutManager = LinearLayoutManager(requireContext())
+        recyclerGroups?.layoutManager = LinearLayoutManager(requireContext())
 
         btnCreateGroup.setOnClickListener {
-            startActivity(Intent(requireContext(), CreateGroupActivity::class.java))
+            context?.let {
+                startActivity(Intent(it, CreateGroupActivity::class.java))
+            }
         }
 
         loadGroups()
@@ -45,65 +48,85 @@ class GroupsFragment : Fragment() {
 
     private fun loadGroups() {
 
-        RetrofitClient.getApiService(requireContext())
-            .getGroupList()
-            .enqueue(object : Callback<ApiResponse<List<GroupMember>>> {
+        context?.let { ctx ->
 
-                override fun onResponse(
-                    call: Call<ApiResponse<List<GroupMember>>>,
-                    response: Response<ApiResponse<List<GroupMember>>>
-                ) {
+            RetrofitClient.getApiService(ctx)
+                .getGroupList()
+                .enqueue(object : Callback<ApiResponse<List<GroupListResponse>>> {
 
-                    if (response.isSuccessful && response.body()?.success == true) {
+                    override fun onResponse(
+                        call: Call<ApiResponse<List<GroupListResponse>>>,
+                        response: Response<ApiResponse<List<GroupListResponse>>>
+                    ) {
 
-                        val groups = response.body()?.data
+                        if (!isAdded) return  // 🔥 VERY IMPORTANT
 
-                        Log.d("GROUP_DEBUG", "Total groups: ${groups?.size}")
+                        if (response.isSuccessful && response.body()?.success == true) {
 
-                        if (groups.isNullOrEmpty()) {
-                            recyclerGroups.visibility = View.GONE
-                        } else {
-                            recyclerGroups.visibility = View.VISIBLE
+                            val groups = response.body()?.data
 
-                            recyclerGroups.adapter = GroupAdapter(groups) { group ->
+                            Log.d("GROUP_DEBUG", "Total groups: ${groups?.size}")
 
-                                val intent = Intent(
-                                    requireContext(),
-                                    GroupDetailsActivity::class.java
-                                )
+                            if (groups.isNullOrEmpty()) {
+                                recyclerGroups?.visibility = View.GONE
+                            } else {
 
-                                intent.putExtra("GROUP_ID", group.id)
-                                intent.putExtra("GROUP_NAME", group.name)
+                                recyclerGroups?.visibility = View.VISIBLE
 
-                                startActivity(intent)
+                                recyclerGroups?.adapter =
+                                    GroupAdapter(groups) { group ->
+
+                                        context?.let {
+                                            val intent = Intent(
+                                                it,
+                                                GroupDetailsActivity::class.java
+                                            )
+
+                                            intent.putExtra("GROUP_ID", group.groupId)
+                                            intent.putExtra("GROUP_NAME", group.groupName)
+
+                                            startActivity(intent)
+                                        }
+                                    }
+
+                                recyclerGroups?.setHasFixedSize(true)
+                                recyclerGroups?.overScrollMode = View.OVER_SCROLL_NEVER
                             }
 
-                            recyclerGroups.setHasFixedSize(true)
-                            recyclerGroups.overScrollMode = View.OVER_SCROLL_NEVER
+                        } else {
+
+                            context?.let {
+                                Toast.makeText(
+                                    it,
+                                    response.body()?.message ?: "Failed to load groups",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         }
-
-                    } else {
-
-                        Toast.makeText(
-                            requireContext(),
-                            response.body()?.message ?: "Failed to load groups",
-                            Toast.LENGTH_SHORT
-                        ).show()
                     }
-                }
 
-                override fun onFailure(
-                    call: Call<ApiResponse<List<GroupMember>>>,
-                    t: Throwable
-                ) {
+                    override fun onFailure(
+                        call: Call<ApiResponse<List<GroupListResponse>>>,
+                        t: Throwable
+                    ) {
 
-                    Toast.makeText(
-                        requireContext(),
-                        "Error: ${t.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            })
+                        if (!isAdded) return  // 🔥 VERY IMPORTANT
+
+                        context?.let {
+                            Toast.makeText(
+                                it,
+                                "Error: ${t.message}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                })
+        }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        recyclerGroups = null   // 🔥 prevents memory leak
+    }
 }
+

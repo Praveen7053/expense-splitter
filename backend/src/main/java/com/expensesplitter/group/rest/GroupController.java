@@ -21,27 +21,67 @@ public class GroupController {
 
     private final GroupService groupService;
 
+    /**
+     * 1️⃣ Create Group
+     * POST /api/groups
+     */
     @PostMapping
-    public ApiResponse<Void> createGroup( @Valid @RequestBody CreateGroupRequest request, Authentication authentication) {
+    public ApiResponse<Void> createGroup(
+            @Valid @RequestBody CreateGroupRequest request,
+            Authentication authentication) {
+
         groupService.createGroup(request, authentication.getName());
-        return new ApiResponse<>(true,"Group created successfully",null);
+
+        return new ApiResponse<>(true, "Group created successfully", null);
     }
 
+    /**
+     * 2️⃣ Get My Groups
+     * GET /api/groups
+     */
+    @GetMapping
+    public ApiResponse<List<GroupListResponse>> getMyGroups(
+            Authentication authentication) {
+
+        List<GroupListResponse> groups =
+                groupService.myGroups(authentication.getName());
+
+        return new ApiResponse<>(true,
+                "Groups fetched successfully",
+                groups);
+    }
+
+    /**
+     * 3️⃣ Add Member to Group
+     * POST /api/groups/{groupId}/members
+     */
     @PostMapping("/{groupId}/members")
-    public ApiResponse<Void> addMember(@PathVariable Long groupId, @Valid @RequestBody AddMemberRequest request, Authentication authentication) {
+    public ApiResponse<Void> addMember(
+            @PathVariable Long groupId,
+            @Valid @RequestBody AddMemberRequest request,
+            Authentication authentication) {
+
         groupService.addMember(groupId, request, authentication.getName());
-        return new ApiResponse<>(true,"Member added successfully",null);
+
+        return new ApiResponse<>(true,
+                "Member added successfully",
+                null);
     }
 
-    @GetMapping("/getGroupList")
-    public ApiResponse<List<GroupListResponse>> myGroups(Authentication authentication) {
-        List<GroupListResponse> groups =groupService.myGroups(authentication.getName());
-        return new ApiResponse<>(true,"Groups fetched successfully", groups);
-    }
-
+    /**
+     * 4️⃣ Get Group Members
+     * GET /api/groups/{groupId}/members
+     */
     @GetMapping("/{groupId}/members")
-    public ApiResponse<List<GroupMemberResponse>> getMembers( @PathVariable Long groupId, Authentication authentication) {
-        List<GroupMemberResponse> members = groupService.getMembers(groupId, authentication.getName());
-        return new ApiResponse<>(true, "Members fetched successfully", members);
+    public ApiResponse<List<GroupMemberResponse>> getMembers(
+            @PathVariable Long groupId,
+            Authentication authentication) {
+
+        List<GroupMemberResponse> members =
+                groupService.getMembers(groupId, authentication.getName());
+
+        return new ApiResponse<>(true,
+                "Members fetched successfully",
+                members);
     }
 }

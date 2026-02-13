@@ -86,7 +86,8 @@ public class GroupService {
         return memberships.stream()
                 .map(m -> new GroupListResponse(
                         m.getGroup().getId(),
-                        m.getGroup().getName()
+                        m.getGroup().getName(),
+                        m.getGroup().getCreatedAt()
                 ))
                 .toList();
     }
