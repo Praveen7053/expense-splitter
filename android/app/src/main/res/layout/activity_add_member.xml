@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@drawable/bg_gradient"
     android:padding="16dp">
 
+    <!-- 🔹 Top Content (Non-scroll part) -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Top Header -->
+        <!-- Header -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="80dp"
@@ -34,7 +36,7 @@
                 android:textStyle="bold"/>
         </LinearLayout>
 
-        <!-- Group Name Card -->
+        <!-- Group Card -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -59,11 +61,11 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Email Input Row -->
+        <!-- Email Row -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="16dp"
             android:gravity="center_vertical">
 
             <EditText
@@ -85,30 +87,40 @@
                 android:layout_marginStart="8dp"/>
         </LinearLayout>
 
-        <!-- 🔹 Current Members Title -->
+        <!-- Title -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Current Members"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:layout_marginBottom="12dp"/>
+            android:layout_marginBottom="8dp"/>
+    </LinearLayout>
 
-        <!-- 🔹 Members RecyclerView -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerMembers"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:nestedScrollingEnabled="false"/>
 
-        <!-- 🔹 Invite Code Section -->
+    <!-- 🔥 Scrollable RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerMembers"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="8dp"/>
+
+
+    <!-- 🔥 Fixed Bottom Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="12dp">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Invite via code"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:layout_marginTop="24dp"
             android:layout_marginBottom="12dp"/>
 
         <androidx.cardview.widget.CardView
@@ -121,8 +133,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:padding="16dp">
+                android:gravity="center">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -143,4 +154,4 @@
 
     </LinearLayout>
 
-</ScrollView>
+</LinearLayout>
