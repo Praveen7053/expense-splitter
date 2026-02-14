@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.expensesplitter.app.model.BalanceResponse
 import com.expensesplitter.app.model.GroupMemberResponse
 import com.expensesplitter.app.model.MyBalanceResponse
 import com.expensesplitter.app.model.apiResponse.ApiResponse
@@ -64,6 +65,7 @@ class GroupDetailsActivity : AppCompatActivity() {
 
         if (groupId != -1L) {
             loadMyBalance(groupId)
+            loadGroupBalances(groupId)
         }
     }
 
@@ -159,5 +161,42 @@ class GroupDetailsActivity : AppCompatActivity() {
     private fun showError(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
+
+    private fun loadGroupBalances(groupId: Long) {
+
+        RetrofitClient.getApiService(this)
+            .getGroupBalances(groupId)
+            .enqueue(object : Callback<ApiResponse<List<BalanceResponse>>> {
+
+                override fun onResponse(
+                    call: Call<ApiResponse<List<BalanceResponse>>>,
+                    response: Response<ApiResponse<List<BalanceResponse>>>
+                ) {
+
+                    val apiResponse = response.body()
+
+                    if (response.isSuccessful && apiResponse?.success == true) {
+
+                        val balances = apiResponse.data ?: emptyList()
+
+                        val totalGroupBalance = balances
+                            .filter { it.netBalance > 0 }
+                            .sumOf { it.netBalance }
+
+                        tvTotalGroupBalance.text = "Total Group Balance ₹$totalGroupBalance"
+                    } else {
+                        showError(apiResponse?.message ?: "Failed to load balances")
+                    }
+                }
+
+                override fun onFailure(
+                    call: Call<ApiResponse<List<BalanceResponse>>>,
+                    t: Throwable
+                ) {
+                    showError(t.message ?: "Something went wrong")
+                }
+            })
+    }
+
 
 }
