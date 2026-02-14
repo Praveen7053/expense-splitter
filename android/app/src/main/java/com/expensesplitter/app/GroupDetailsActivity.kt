@@ -2,6 +2,7 @@ package com.expensesplitter.app
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -33,7 +34,13 @@ class GroupDetailsActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        loadGroupMembers()
+
+        if (groupId != -1L) {
+            loadGroupMembers()
+            loadMyBalance(groupId)
+            loadGroupBalances(groupId)
+            loadExpenses(groupId)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,18 +68,18 @@ class GroupDetailsActivity : AppCompatActivity() {
         recyclerMembers = findViewById(R.id.recyclerMembersHorizontal)
         recyclerMembers.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
-        loadGroupMembers()
-
         tvBalanceTitle = findViewById(R.id.tvBalanceTitle)
         tvTotalGroupBalance = findViewById(R.id.tvTotalGroupBalance)
 
         recyclerExpenses = findViewById(R.id.recyclerExpenses)
         recyclerExpenses.layoutManager = LinearLayoutManager(this)
 
-        if (groupId != -1L) {
-            loadMyBalance(groupId)
-            loadGroupBalances(groupId)
-            loadExpenses(groupId)
+        val btnAddExpense = findViewById<Button>(R.id.btnAddExpense)
+        btnAddExpense.setOnClickListener {
+            val intent = Intent(this, AddExpenseActivity::class.java)
+            intent.putExtra("GROUP_ID", groupId)
+            intent.putExtra("GROUP_NAME", groupName) // optional
+            startActivity(intent)
         }
     }
 
@@ -154,10 +161,10 @@ class GroupDetailsActivity : AppCompatActivity() {
 
         when {
             balance < 0 -> {
-                tvBalanceTitle.text = "You owe ₹${kotlin.math.abs(balance)}"
+                tvBalanceTitle.text = "You owe ₹${String.format("%.2f", balance)}"
             }
             balance > 0 -> {
-                tvBalanceTitle.text = "You get ₹$balance"
+                tvBalanceTitle.text = "You get ₹${String.format("%.2f", balance)}"
             }
             else -> {
                 tvBalanceTitle.text = "All settled 🎉"

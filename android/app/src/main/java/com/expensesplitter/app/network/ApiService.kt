@@ -2,6 +2,7 @@ package com.expensesplitter.app.network
 
 import com.expensesplitter.app.model.AddMemberRequest
 import com.expensesplitter.app.model.BalanceResponse
+import com.expensesplitter.app.model.CreateExpenseRequest
 import com.expensesplitter.app.model.CreateGroupRequest
 import com.expensesplitter.app.model.ExpenseResponse
 import com.expensesplitter.app.model.GroupListResponse
@@ -69,5 +70,10 @@ interface ApiService {
         @Path("groupId") groupId: Long
     ): Call<ApiResponse<List<ExpenseResponse>>>
 
+    @POST("api/groups/{groupId}/expenses")
+    fun createExpense(
+        @Path("groupId") groupId: Long,
+        @Body request: CreateExpenseRequest
+    ): Call<ApiResponse<String>>
 
 }
