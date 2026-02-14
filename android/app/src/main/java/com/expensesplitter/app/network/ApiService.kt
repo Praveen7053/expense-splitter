@@ -6,6 +6,7 @@ import com.expensesplitter.app.model.GroupListResponse
 import com.expensesplitter.app.model.GroupMemberResponse
 import com.expensesplitter.app.model.LoginRequest
 import com.expensesplitter.app.model.LoginResponse
+import com.expensesplitter.app.model.MyBalanceResponse
 import com.expensesplitter.app.model.RegisterRequest
 import com.expensesplitter.app.model.RegisterResponse
 import com.expensesplitter.app.model.apiResponse.ApiResponse
@@ -50,4 +51,11 @@ interface ApiService {
         @Path("groupId") groupId: Long,
         @Body request: AddMemberRequest
     ): Call<ApiResponse<Void>>
+
+    @GET("api/groups/{groupId}/balances/my-balance")
+    fun getMyBalance(
+        @Path("groupId") groupId: Long
+    ): Call<ApiResponse<MyBalanceResponse>>
+
+
 }
