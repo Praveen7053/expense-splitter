@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.expensesplitter.app.model.BalanceResponse
+import com.expensesplitter.app.model.ExpenseResponse
 import com.expensesplitter.app.model.GroupMemberResponse
 import com.expensesplitter.app.model.MyBalanceResponse
 import com.expensesplitter.app.model.apiResponse.ApiResponse
@@ -25,6 +26,8 @@ class GroupDetailsActivity : AppCompatActivity() {
     private lateinit var tvBalanceTitle: TextView
 
     private lateinit var tvTotalGroupBalance: TextView
+
+    private lateinit var recyclerExpenses: RecyclerView
 
     private var groupId: Long = -1
 
@@ -63,9 +66,13 @@ class GroupDetailsActivity : AppCompatActivity() {
         tvBalanceTitle = findViewById(R.id.tvBalanceTitle)
         tvTotalGroupBalance = findViewById(R.id.tvTotalGroupBalance)
 
+        recyclerExpenses = findViewById(R.id.recyclerExpenses)
+        recyclerExpenses.layoutManager = LinearLayoutManager(this)
+
         if (groupId != -1L) {
             loadMyBalance(groupId)
             loadGroupBalances(groupId)
+            loadExpenses(groupId)
         }
     }
 
@@ -197,6 +204,40 @@ class GroupDetailsActivity : AppCompatActivity() {
                 }
             })
     }
+
+    private fun loadExpenses(groupId: Long) {
+
+        RetrofitClient.getApiService(this)
+            .getExpenses(groupId)
+            .enqueue(object : Callback<ApiResponse<List<ExpenseResponse>>> {
+
+                override fun onResponse(
+                    call: Call<ApiResponse<List<ExpenseResponse>>>,
+                    response: Response<ApiResponse<List<ExpenseResponse>>>
+                ) {
+
+                    val apiResponse = response.body()
+
+                    if (response.isSuccessful && apiResponse?.success == true) {
+
+                        val expenses = apiResponse.data ?: emptyList()
+
+                        recyclerExpenses.adapter = ExpenseAdapter(expenses)
+
+                    } else {
+                        showError(apiResponse?.message ?: "Failed to load expenses")
+                    }
+                }
+
+                override fun onFailure(
+                    call: Call<ApiResponse<List<ExpenseResponse>>>,
+                    t: Throwable
+                ) {
+                    showError(t.message ?: "Something went wrong")
+                }
+            })
+    }
+
 
 
 }
