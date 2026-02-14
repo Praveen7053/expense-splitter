@@ -1,6 +1,34 @@
-<CheckBox
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/cbParticipant"
+    android:id="@+id/layoutContainer"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="12dp"/>
+    android:layout_height="50dp"
+    android:layout_margin="6dp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingStart="12dp"
+    android:paddingEnd="12dp"
+    android:background="@drawable/bg_participant_unselected">
+
+    <!-- Initial Circle -->
+    <TextView
+        android:id="@+id/tvInitial"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:gravity="center"
+        android:text="A"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:background="@drawable/bg_initial_circle"/>
+
+    <!-- Name -->
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="Alice"
+        android:textSize="15sp"
+        android:textColor="#2E2E2E"/>
+</LinearLayout>

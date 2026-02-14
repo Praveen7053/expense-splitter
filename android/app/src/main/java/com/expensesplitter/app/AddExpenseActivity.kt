@@ -1,9 +1,18 @@
 package com.expensesplitter.app
 
 import android.os.Bundle
-import android.widget.*
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.Spinner
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.appcompat.widget.SwitchCompat
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.expensesplitter.app.model.CreateExpenseRequest
 import com.expensesplitter.app.model.GroupMemberResponse
@@ -29,18 +38,39 @@ class AddExpenseActivity : AppCompatActivity() {
         val spinnerPaidBy = findViewById<Spinner>(R.id.spinnerPaidBy)
         val rvParticipants = findViewById<RecyclerView>(R.id.rvParticipants)
         val btnSave = findViewById<Button>(R.id.btnSaveExpense)
+        val cbSelectAll = findViewById<SwitchCompat>(R.id.cbSelectAll)
 
         loadMembers { members ->
 
             participantAdapter = ParticipantAdapter(members)
-            rvParticipants.layoutManager = LinearLayoutManager(this)
+
+            rvParticipants.layoutManager = GridLayoutManager(this, 2)
             rvParticipants.adapter = participantAdapter
 
             spinnerPaidBy.adapter = ArrayAdapter(
                 this,
                 android.R.layout.simple_spinner_dropdown_item,
-                members.map { member -> member.name }
+                members.map { it.name }
             )
+
+            val tvInitial = findViewById<TextView>(R.id.tvPaidByInitial)
+
+            spinnerPaidBy.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    val name = members[position].name
+                    tvInitial.text = name.first().toString()
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
+
+            cbSelectAll.setOnCheckedChangeListener(null)
+            cbSelectAll.isChecked = true
+            participantAdapter.selectAll(true)
+
+            cbSelectAll.setOnCheckedChangeListener { _, isChecked ->
+                participantAdapter.selectAll(isChecked)
+            }
 
             btnSave.setOnClickListener {
 
@@ -65,6 +95,11 @@ class AddExpenseActivity : AppCompatActivity() {
                 val paidByIndex = spinnerPaidBy.selectedItemPosition
                 val paidById = members[paidByIndex].id
 
+                if (!participantAdapter.selectedIds.contains(paidById)) {
+                    Toast.makeText(this, "Paid by must be included in split", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
                 val request = CreateExpenseRequest(
                     description = description,
                     totalAmount = amount,
@@ -72,12 +107,17 @@ class AddExpenseActivity : AppCompatActivity() {
                     participantIds = participantAdapter.selectedIds.toList()
                 )
 
-                createExpense(request)
+                btnSave.isEnabled = false
+                createExpense(request, btnSave)
             }
+        }
+
+        findViewById<ImageView>(R.id.btnBack).setOnClickListener {
+            finish()
         }
     }
 
-    private fun createExpense(request: CreateExpenseRequest) {
+    private fun createExpense(request: CreateExpenseRequest, btnSave: Button) {
 
         RetrofitClient.getApiService(this)
             .createExpense(groupId, request)
@@ -88,6 +128,7 @@ class AddExpenseActivity : AppCompatActivity() {
                     response: Response<ApiResponse<String>>
                 ) {
 
+                    btnSave.isEnabled = true
                     if (response.isSuccessful && response.body()?.success == true) {
 
                         Toast.makeText(
@@ -111,6 +152,8 @@ class AddExpenseActivity : AppCompatActivity() {
                     call: Call<ApiResponse<String>>,
                     t: Throwable
                 ) {
+                    btnSave.isEnabled = true
+
                     Toast.makeText(
                         this@AddExpenseActivity,
                         "Network error: ${t.message}",
