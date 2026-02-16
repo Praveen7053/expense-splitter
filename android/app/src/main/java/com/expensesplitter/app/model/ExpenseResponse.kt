@@ -6,5 +6,6 @@ data class ExpenseResponse(
     val totalAmount: Double,
     val paidById: Long,
     val paidByName: String,
-    val expenseDate: String
+    val expenseDate: String,
+    val participants: List<ExpenseParticipantResponse>
 )

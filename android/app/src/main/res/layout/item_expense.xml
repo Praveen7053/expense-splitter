@@ -50,7 +50,7 @@
                 android:textColor="#2E1A47"/>
 
             <TextView
-                android:id="@+id/tvExpensePaidBy"
+                android:id="@+id/tvExpenseMeta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Paid by Praveen • Jul 10"

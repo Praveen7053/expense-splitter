@@ -15,7 +15,7 @@ class ExpenseAdapter(
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvDescription: TextView = view.findViewById(R.id.tvExpenseDescription)
         val tvAmount: TextView = view.findViewById(R.id.tvExpenseAmount)
-        val tvPaidBy: TextView = view.findViewById(R.id.tvExpensePaidBy)
+        val tvPaidBy: TextView = view.findViewById(R.id.tvExpenseMeta)
         val ivIcon: ImageView = view.findViewById(R.id.ivExpenseIcon)
     }
 
@@ -33,7 +33,7 @@ class ExpenseAdapter(
 
         holder.tvDescription.text = expense.description
         holder.tvAmount.text = "₹${expense.totalAmount}"
-        holder.tvPaidBy.text = "Paid by ${expense.paidByName}"
+        holder.tvPaidBy.text = "Paid by ${expense.paidByName} • ${expense.participants.size} members"
 
         // 🔥 Dynamic Icon Logic (Simple Version)
         when {
