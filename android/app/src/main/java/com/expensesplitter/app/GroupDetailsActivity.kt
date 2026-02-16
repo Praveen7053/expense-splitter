@@ -15,6 +15,7 @@ import com.expensesplitter.app.model.GroupMemberResponse
 import com.expensesplitter.app.model.MyBalanceResponse
 import com.expensesplitter.app.model.apiResponse.ApiResponse
 import com.expensesplitter.app.network.RetrofitClient
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -73,8 +74,9 @@ class GroupDetailsActivity : AppCompatActivity() {
 
         recyclerExpenses = findViewById(R.id.recyclerExpenses)
         recyclerExpenses.layoutManager = LinearLayoutManager(this)
+        recyclerExpenses.setHasFixedSize(true)
 
-        val btnAddExpense = findViewById<Button>(R.id.btnAddExpense)
+        val btnAddExpense = findViewById<FloatingActionButton>(R.id.fabAddExpense)
         btnAddExpense.setOnClickListener {
             val intent = Intent(this, AddExpenseActivity::class.java)
             intent.putExtra("GROUP_ID", groupId)
@@ -197,7 +199,8 @@ class GroupDetailsActivity : AppCompatActivity() {
                             .filter { it.netBalance > 0 }
                             .sumOf { it.netBalance }
 
-                        tvTotalGroupBalance.text = "Total Group Balance ₹$totalGroupBalance"
+                        tvTotalGroupBalance.text =
+                            "Total Group Balance ₹${String.format("%.2f", totalGroupBalance)}"
                     } else {
                         showError(apiResponse?.message ?: "Failed to load balances")
                     }
