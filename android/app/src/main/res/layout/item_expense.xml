@@ -1,35 +1,35 @@
-<androidx.cardview.widget.CardView
+<com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="10dp"
-    app:cardCornerRadius="22dp"
-    app:cardElevation="3dp"
-    app:cardUseCompatPadding="false"
-    app:cardBackgroundColor="#F9F7FF">
+    android:layout_marginVertical="4dp"
+    app:cardCornerRadius="18dp"
+    app:cardElevation="1dp"
+    app:strokeColor="#EAE6FF"
+    app:strokeWidth="0.6dp"
+    app:cardBackgroundColor="@android:color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="18dp"
+        android:padding="10dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <!-- Soft Icon Circle -->
+        <!-- Icon Circle -->
         <FrameLayout
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/bg_soft_circle"
-            android:layout_gravity="center_vertical">
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:background="@drawable/bg_soft_circle">
 
             <ImageView
                 android:id="@+id/ivExpenseIcon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_activity"
-                android:scaleType="centerInside"/>
+                android:tint="#6A5AE0"/>
         </FrameLayout>
 
         <!-- Text Section -->
@@ -38,14 +38,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:layout_marginStart="16dp">
+            android:layout_marginStart="10dp">
 
             <TextView
                 android:id="@+id/tvExpenseDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Dinner"
-                android:textSize="17sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 android:textColor="#2E1A47"/>
 
@@ -53,22 +53,38 @@
                 android:id="@+id/tvExpenseMeta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Paid by Praveen • Jul 10"
-                android:textSize="13sp"
-                android:textColor="#9A9A9A"
-                android:layout_marginTop="4dp"/>
+                android:text="Paid by Praveen • 6 members"
+                android:textSize="11sp"
+                android:textColor="#9E9E9E"
+                android:layout_marginTop="1dp"/>
         </LinearLayout>
 
-        <!-- Amount -->
-        <TextView
-            android:id="@+id/tvExpenseAmount"
+        <!-- Amount Section -->
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="₹3000"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="#6A5AE0"/>
+            android:orientation="vertical"
+            android:gravity="end"
+            android:layout_marginStart="8dp">
+
+            <TextView
+                android:id="@+id/tvExpenseAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="#6A5AE0"/>
+
+            <TextView
+                android:id="@+id/tvBalanceHint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="16dp"
+                android:textSize="11sp"
+                android:layout_marginTop="3dp"/>
+        </LinearLayout>
+
 
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

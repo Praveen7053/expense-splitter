@@ -2,6 +2,7 @@ package com.expensesplitter.user.service;
 
 import com.expensesplitter.common.config.JwtUtil;
 import com.expensesplitter.user.dto.LoginRequest;
+import com.expensesplitter.user.dto.LoginResponse;
 import com.expensesplitter.user.dto.RegisterRequest;
 import com.expensesplitter.user.entity.UserExpensesSplitter;
 import com.expensesplitter.user.repository.UserExpensesSplitterRepository;
@@ -31,7 +32,7 @@ public class AuthService {
         userRepository.save(user);
     }
 
-    public String login(LoginRequest request) {
+    public LoginResponse login(LoginRequest request) {
 
         UserExpensesSplitter user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("Invalid email or password"));
@@ -40,6 +41,13 @@ public class AuthService {
             throw new RuntimeException("Invalid email or password");
         }
 
-        return jwtUtil.generateToken(user.getEmail());
+        String token = jwtUtil.generateToken(user.getEmail());
+
+        return new LoginResponse(
+                user.getId(),
+                user.getName(),
+                token
+        );
     }
+
 }

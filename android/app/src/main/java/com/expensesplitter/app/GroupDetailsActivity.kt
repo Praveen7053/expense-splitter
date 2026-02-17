@@ -163,10 +163,12 @@ class GroupDetailsActivity : AppCompatActivity() {
 
         when {
             balance < 0 -> {
-                tvBalanceTitle.text = "You owe ₹${String.format("%.2f", balance)}"
+                tvBalanceTitle.text =
+                    "You owe ₹${String.format("%.2f", kotlin.math.abs(balance))}"
             }
             balance > 0 -> {
-                tvBalanceTitle.text = "You get ₹${String.format("%.2f", balance)}"
+                tvBalanceTitle.text =
+                    "You get ₹${String.format("%.2f", balance)}"
             }
             else -> {
                 tvBalanceTitle.text = "All settled 🎉"

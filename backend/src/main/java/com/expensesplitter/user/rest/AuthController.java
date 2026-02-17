@@ -34,10 +34,9 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ApiResponse<LoginResponse> login( @Valid @RequestBody LoginRequest request) {
-        String token = authService.login(request);
+    public ApiResponse<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
 
-        LoginResponse response = new LoginResponse(token);
+        LoginResponse response = authService.login(request);
 
         return new ApiResponse<>(
                 true,

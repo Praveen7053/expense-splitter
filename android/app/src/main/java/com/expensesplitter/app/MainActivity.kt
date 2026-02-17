@@ -49,9 +49,11 @@ class MainActivity : AppCompatActivity() {
                         if (response.isSuccessful && response.body()?.success == true) {
                             val token = response.body()?.data?.token
                             val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
+                            val data = response.body()?.data
+
                             sharedPref.edit()
-                                .putString("token", token)
-                                .putString("email", email)
+                                .putString("token", data?.token)
+                                .putLong("USER_ID", data?.userId ?: -1L)
                                 .apply()
 
                             val intent = Intent(this@MainActivity, HomeActivity::class.java)

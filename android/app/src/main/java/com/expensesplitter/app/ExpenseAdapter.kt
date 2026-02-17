@@ -1,5 +1,6 @@
 package com.expensesplitter.app
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,6 +8,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.expensesplitter.app.model.ExpenseResponse
+import android.graphics.Color
+import android.util.Log
+import java.math.BigDecimal
+
 
 class ExpenseAdapter(
     private val expenses: List<ExpenseResponse>
@@ -17,6 +22,7 @@ class ExpenseAdapter(
         val tvAmount: TextView = view.findViewById(R.id.tvExpenseAmount)
         val tvPaidBy: TextView = view.findViewById(R.id.tvExpenseMeta)
         val ivIcon: ImageView = view.findViewById(R.id.ivExpenseIcon)
+        val tvBalanceHint: TextView = view.findViewById(R.id.tvBalanceHint)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -50,6 +56,44 @@ class ExpenseAdapter(
             else ->
                 holder.ivIcon.setImageResource(R.drawable.ic_activity)
         }
+
+        val currentUserId = getCurrentUserId(holder.itemView.context)
+
+        val myParticipant = expense.participants.find {
+            it.userId == currentUserId
+        }
+
+        if (myParticipant != null) {
+
+            val balance = myParticipant.netBalance
+            Log.d("ExpenseCheck", "${expense.description} -> ${myParticipant?.netBalance}")
+
+            when {
+                balance > BigDecimal.ZERO -> {
+                    holder.tvBalanceHint.text =
+                        "You get ₹${balance.setScale(2)}"
+                    holder.tvBalanceHint.setTextColor(Color.parseColor("#2E7D32"))
+                }
+
+                balance < BigDecimal.ZERO -> {
+                    holder.tvBalanceHint.text =
+                        "You owe ₹${balance.abs().setScale(2)}"
+                    holder.tvBalanceHint.setTextColor(Color.parseColor("#E53935"))
+                }
+
+                else -> {
+                    holder.tvBalanceHint.text = "Settled"
+                    holder.tvBalanceHint.setTextColor(Color.parseColor("#9E9E9E"))
+                }
+            }
+        }
+
     }
+
+    private fun getCurrentUserId(context: Context): Long {
+        val sharedPref = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        return sharedPref.getLong("USER_ID", -1)
+    }
+
 }
 
