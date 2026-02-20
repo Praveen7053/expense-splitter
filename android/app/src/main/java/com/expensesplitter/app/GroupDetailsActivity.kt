@@ -2,7 +2,6 @@ package com.expensesplitter.app
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -234,8 +233,12 @@ class GroupDetailsActivity : AppCompatActivity() {
 
                         val expenses = apiResponse.data ?: emptyList()
 
-                        recyclerExpenses.adapter = ExpenseAdapter(expenses)
-
+                        recyclerExpenses.adapter = ExpenseAdapter(expenses) { expense ->
+                            val intent = Intent(this@GroupDetailsActivity, ExpenseDetailActivity::class.java)
+                            intent.putExtra("GROUP_ID", groupId)
+                            intent.putExtra("EXPENSE_ID", expense.expenseId)
+                            startActivity(intent)
+                        }
                     } else {
                         showError(apiResponse?.message ?: "Failed to load expenses")
                     }

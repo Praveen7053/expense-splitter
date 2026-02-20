@@ -91,6 +91,7 @@ public class ExpenseService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public ExpenseResponse getExpenseById(Long groupId, Long expenseId, String email) {
 
         validateGroupAccess(groupId, email);  // 🔥 ADD THIS

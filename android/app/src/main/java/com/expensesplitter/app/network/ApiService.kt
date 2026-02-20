@@ -76,4 +76,10 @@ interface ApiService {
         @Body request: CreateExpenseRequest
     ): Call<ApiResponse<String>>
 
+    @GET("api/groups/{groupId}/expenses/{expenseId}")
+    fun getExpenseById(
+        @Path("groupId") groupId: Long,
+        @Path("expenseId") expenseId: Long
+    ): Call<ApiResponse<ExpenseResponse>>
+
 }

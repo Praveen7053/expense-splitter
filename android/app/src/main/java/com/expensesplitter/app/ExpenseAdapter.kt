@@ -14,7 +14,8 @@ import java.math.BigDecimal
 
 
 class ExpenseAdapter(
-    private val expenses: List<ExpenseResponse>
+    private val expenses: List<ExpenseResponse>,
+    private val onClick: (ExpenseResponse) -> Unit
 ) : RecyclerView.Adapter<ExpenseAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -88,6 +89,9 @@ class ExpenseAdapter(
             }
         }
 
+        holder.itemView.setOnClickListener {
+            onClick(expense)
+        }
     }
 
     private fun getCurrentUserId(context: Context): Long {
