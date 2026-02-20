@@ -14,4 +14,10 @@
     <color name="green">#2ECC71</color>
     <color name="red">#E74C3C</color>
     <color name="gray">#9E9E9E</color>
+
+    <color name="card_positive_bg">#EAF8F1</color>
+    <color name="card_negative_bg">#FDECEA</color>
+
+    <color name="text_positive">#2ECC71</color>
+    <color name="text_negative">#E74C3C</color>
 </resources>

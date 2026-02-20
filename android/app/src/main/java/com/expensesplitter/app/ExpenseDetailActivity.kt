@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.expensesplitter.app.databinding.ActivityExpenseDetailBinding
 import com.expensesplitter.app.model.ExpenseResponse
 import com.expensesplitter.app.model.apiResponse.ApiResponse
@@ -13,6 +12,7 @@ import com.expensesplitter.app.network.RetrofitClient
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import java.util.Locale
+import androidx.recyclerview.widget.GridLayoutManager
 
 class ExpenseDetailActivity : AppCompatActivity() {
 
@@ -41,8 +41,10 @@ class ExpenseDetailActivity : AppCompatActivity() {
         participantAdapter = ExpenseDetailParticipantAdapter(emptyList())
 
         binding.recyclerParticipants.apply {
-            layoutManager = LinearLayoutManager(this@ExpenseDetailActivity)
+            layoutManager = GridLayoutManager(this@ExpenseDetailActivity, 2)
             adapter = participantAdapter
+            setPadding(8, 8, 8, 8)
+            clipToPadding = false
         }
     }
 

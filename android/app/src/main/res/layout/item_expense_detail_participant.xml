@@ -3,63 +3,40 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="12dp"
-    app:cardCornerRadius="18dp"
-    app:cardElevation="4dp"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="3dp"
+    android:foreground="?attr/selectableItemBackground"
+    android:clickable="true"
     app:cardBackgroundColor="@color/white_translucent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:orientation="vertical"
+        android:padding="14dp"
+        android:gravity="center_horizontal">
 
-        <!-- Avatar Circle -->
+        <!-- Avatar -->
         <TextView
             android:id="@+id/tvInitial"
             android:layout_width="42dp"
             android:layout_height="42dp"
             android:gravity="center"
-            android:text="R"
             android:textStyle="bold"
+            android:textSize="16sp"
             android:textColor="@android:color/white"
-            android:background="@drawable/bg_circle_purple"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:background="@drawable/bg_circle_purple" />
 
         <!-- Name -->
         <TextView
             android:id="@+id/tvName"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:textSize="15sp"
             android:textColor="#2E2E2E"
-            app:layout_constraintStart_toEndOf="@id/tvInitial"
-            app:layout_constraintTop_toTopOf="@id/tvInitial"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginStart="12dp"/>
-
-        <!-- Owed -->
-        <TextView
-            android:id="@+id/tvOwed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="13sp"
-            android:textColor="@color/softGray"
-            app:layout_constraintStart_toStartOf="@id/tvName"
-            app:layout_constraintTop_toBottomOf="@id/tvName"
-            android:layout_marginTop="4dp"/>
-
-        <!-- Paid -->
-        <TextView
-            android:id="@+id/tvPaid"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="13sp"
-            android:textColor="@color/softGray"
-            app:layout_constraintStart_toEndOf="@id/tvOwed"
-            app:layout_constraintTop_toTopOf="@id/tvOwed"
-            android:layout_marginStart="16dp"/>
+            android:layout_marginTop="10dp"/>
 
         <!-- Net Result -->
         <TextView
@@ -68,9 +45,8 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            android:layout_marginTop="4dp"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 </androidx.cardview.widget.CardView>

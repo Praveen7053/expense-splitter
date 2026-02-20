@@ -5,10 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.expensesplitter.app.model.ExpenseParticipantResponse
 import java.math.BigDecimal
-
 
 class ExpenseDetailParticipantAdapter(
     private var list: List<ExpenseParticipantResponse>
@@ -17,8 +17,6 @@ class ExpenseDetailParticipantAdapter(
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvName: TextView = view.findViewById(R.id.tvName)
         val tvInitial: TextView = view.findViewById(R.id.tvInitial)
-        val tvOwed: TextView = view.findViewById(R.id.tvOwed)
-        val tvPaid: TextView = view.findViewById(R.id.tvPaid)
         val tvNet: TextView = view.findViewById(R.id.tvNet)
     }
 
@@ -34,24 +32,28 @@ class ExpenseDetailParticipantAdapter(
 
         val item = list[position]
 
-        holder.tvName.text = item.userName
         holder.tvInitial.text =
             item.userName.first().toString().uppercase()
 
-        holder.tvOwed.text = "Owes: ₹${item.amountOwed}"
-        holder.tvPaid.text = "Paid: ₹${item.amountPaid}"
+        holder.tvName.text = item.userName
 
-        val net: BigDecimal = item.netBalance
+        val net = item.netBalance
 
         when {
             net.compareTo(BigDecimal.ZERO) > 0 -> {
-                holder.tvNet.text = "Gets ₹$net"
-                holder.tvNet.setTextColor(Color.parseColor("#2ECC71"))
+                holder.tvNet.text =
+                    "Gets ₹${net.stripTrailingZeros().toPlainString()}"
+                holder.tvNet.setTextColor(
+                    ContextCompat.getColor(holder.itemView.context, R.color.text_positive)
+                )
             }
 
             net.compareTo(BigDecimal.ZERO) < 0 -> {
-                holder.tvNet.text = "Owes ₹${net.abs()}"
-                holder.tvNet.setTextColor(Color.parseColor("#E74C3C"))
+                holder.tvNet.text =
+                    "Owes ₹${net.abs().stripTrailingZeros().toPlainString()}"
+                holder.tvNet.setTextColor(
+                    ContextCompat.getColor(holder.itemView.context, R.color.text_negative)
+                )
             }
 
             else -> {
@@ -61,10 +63,8 @@ class ExpenseDetailParticipantAdapter(
         }
     }
 
-
     fun updateData(newList: List<ExpenseParticipantResponse>) {
         list = newList
         notifyDataSetChanged()
     }
 }
-
