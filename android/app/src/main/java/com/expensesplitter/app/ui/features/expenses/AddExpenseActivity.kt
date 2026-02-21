@@ -1,5 +1,6 @@
 package com.expensesplitter.app.ui.features.expenses
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.expensesplitter.app.databinding.ExpensesActivityAddExpenseBinding
 import com.expensesplitter.app.model.common.ApiResponse
 import com.expensesplitter.app.model.expenses.CreateExpenseRequest
+import com.expensesplitter.app.model.expenses.ExpenseResponse
 import com.expensesplitter.app.model.groups.GroupMemberResponse
 import com.expensesplitter.app.network.RetrofitClient
 import retrofit2.Call
@@ -21,6 +23,7 @@ class AddExpenseActivity : AppCompatActivity() {
     private lateinit var binding: ExpensesActivityAddExpenseBinding
     private lateinit var participantAdapter: ParticipantAdapter
     private var groupId: Long = 0
+    private var expenseId: Long = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +31,12 @@ class AddExpenseActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         groupId = intent.getLongExtra("GROUP_ID", 0)
+        expenseId = intent.getLongExtra("EXPENSE_ID", -1)
+
+        if (expenseId != -1L) {
+            binding.btnSaveExpense.text = "Update"
+            loadExpenseDetails()
+        }
 
         loadMembers { members ->
 
@@ -95,13 +104,38 @@ class AddExpenseActivity : AppCompatActivity() {
                 )
 
                 binding.btnSaveExpense.isEnabled = false
-                createExpense(request)
+                if (expenseId == -1L) {
+                    createExpense(request)
+                } else {
+                    updateExpense(request)
+                }
             }
         }
 
         binding.btnBack.setOnClickListener {
             finish()
         }
+    }
+
+    private fun loadExpenseDetails() {
+        RetrofitClient.getApiService(this).getExpenseById(groupId, expenseId)
+            .enqueue(object : Callback<ApiResponse<ExpenseResponse>> {
+                override fun onResponse(
+                    call: Call<ApiResponse<ExpenseResponse>>,
+                    response: Response<ApiResponse<ExpenseResponse>>
+                ) {
+                    if (response.isSuccessful && response.body()?.data != null) {
+                        val expense = response.body()?.data!!
+                        binding.etAmount.setText(expense.totalAmount.toString())
+                        binding.etDescription.setText(expense.description)
+                        // TODO: Set spinner and participants
+                    }
+                }
+
+                override fun onFailure(call: Call<ApiResponse<ExpenseResponse>>, t: Throwable) {
+                    // TODO: Handle failure
+                }
+            })
     }
 
     private fun createExpense(request: CreateExpenseRequest) {
@@ -124,6 +158,7 @@ class AddExpenseActivity : AppCompatActivity() {
                             Toast.LENGTH_SHORT
                         ).show()
 
+                        setResult(Activity.RESULT_OK)
                         finish()
 
                     } else {
@@ -141,6 +176,43 @@ class AddExpenseActivity : AppCompatActivity() {
                 ) {
                     binding.btnSaveExpense.isEnabled = true
 
+                    Toast.makeText(
+                        this@AddExpenseActivity,
+                        "Network error: ${t.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            })
+    }
+
+    private fun updateExpense(request: CreateExpenseRequest) {
+        RetrofitClient.getApiService(this)
+            .updateExpense(groupId, expenseId, request)
+            .enqueue(object : Callback<ApiResponse<String>> {
+                override fun onResponse(
+                    call: Call<ApiResponse<String>>,
+                    response: Response<ApiResponse<String>>
+                ) {
+                    binding.btnSaveExpense.isEnabled = true
+                    if (response.isSuccessful && response.body()?.success == true) {
+                        Toast.makeText(
+                            this@AddExpenseActivity,
+                            response.body()?.message ?: "Expense updated",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        setResult(Activity.RESULT_OK)
+                        finish()
+                    } else {
+                        Toast.makeText(
+                            this@AddExpenseActivity,
+                            response.body()?.message ?: "Failed to update expense",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<ApiResponse<String>>, t: Throwable) {
+                    binding.btnSaveExpense.isEnabled = true
                     Toast.makeText(
                         this@AddExpenseActivity,
                         "Network error: ${t.message}",

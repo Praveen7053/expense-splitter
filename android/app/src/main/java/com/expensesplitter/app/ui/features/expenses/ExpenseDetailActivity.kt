@@ -1,8 +1,12 @@
 package com.expensesplitter.app.ui.features.expenses
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
@@ -23,6 +27,12 @@ class ExpenseDetailActivity : AppCompatActivity() {
     private var groupId: Long = -1
     private var expenseId: Long = -1
 
+    private val editExpenseLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == Activity.RESULT_OK) {
+            fetchExpenseDetail()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ExpensesActivityExpenseDetailBinding.inflate(layoutInflater)
@@ -35,6 +45,47 @@ class ExpenseDetailActivity : AppCompatActivity() {
         fetchExpenseDetail()
 
         binding.btnBack.setOnClickListener { finish() }
+
+        binding.btnDelete.setOnClickListener {
+            showDeleteConfirmation()
+        }
+
+        binding.btnEdit.setOnClickListener {
+            val intent = Intent(this, AddExpenseActivity::class.java)
+            intent.putExtra("GROUP_ID", groupId)
+            intent.putExtra("EXPENSE_ID", expenseId)
+            editExpenseLauncher.launch(intent)
+        }
+    }
+
+    private fun showDeleteConfirmation() {
+        AlertDialog.Builder(this)
+            .setTitle("Delete Expense")
+            .setMessage("Are you sure you want to delete this expense?")
+            .setPositiveButton("Delete") { _, _ -> deleteExpense() }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun deleteExpense() {
+        RetrofitClient.getApiService(this).deleteExpense(groupId, expenseId)
+            .enqueue(object : retrofit2.Callback<ApiResponse<String>> {
+                override fun onResponse(
+                    call: retrofit2.Call<ApiResponse<String>>,
+                    response: retrofit2.Response<ApiResponse<String>>
+                ) {
+                    if (response.isSuccessful) {
+                        Toast.makeText(this@ExpenseDetailActivity, "Expense deleted", Toast.LENGTH_SHORT).show()
+                        finish()
+                    } else {
+                        Toast.makeText(this@ExpenseDetailActivity, "Failed to delete expense", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: retrofit2.Call<ApiResponse<String>>, t: Throwable) {
+                    Toast.makeText(this@ExpenseDetailActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
     }
 
     private fun setupRecycler() {

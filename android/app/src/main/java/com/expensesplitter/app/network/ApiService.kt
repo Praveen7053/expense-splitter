@@ -15,8 +15,10 @@ import com.expensesplitter.app.model.groups.GroupMemberResponse
 import com.expensesplitter.app.model.expenses.MyBalanceResponse
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface ApiService {
@@ -82,4 +84,16 @@ interface ApiService {
         @Path("expenseId") expenseId: Long
     ): Call<ApiResponse<ExpenseResponse>>
 
+    @PUT("api/groups/{groupId}/expenses/{expenseId}")
+    fun updateExpense(
+        @Path("groupId") groupId: Long,
+        @Path("expenseId") expenseId: Long,
+        @Body request: CreateExpenseRequest
+    ): Call<ApiResponse<String>>
+
+    @DELETE("api/groups/{groupId}/expenses/{expenseId}")
+    fun deleteExpense(
+        @Path("groupId") groupId: Long,
+        @Path("expenseId") expenseId: Long
+    ): Call<ApiResponse<String>>
 }
