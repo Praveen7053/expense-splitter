@@ -3,15 +3,23 @@ package com.expensesplitter.app.ui.features.groups
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.expensesplitter.app.R
 import com.expensesplitter.app.databinding.ItemItemGroupBinding
 import com.expensesplitter.app.model.groups.GroupListResponse
+import kotlin.math.abs
 
 class GroupAdapter(
     private val groups: List<GroupListResponse>,
     private val onClick: (GroupListResponse) -> Unit
 ) : RecyclerView.Adapter<GroupAdapter.GroupViewHolder>() {
 
-    class GroupViewHolder(val binding: ItemItemGroupBinding) : RecyclerView.ViewHolder(binding.root)
+    private val icons = listOf(
+        R.drawable.ic_mountain,
+        R.drawable.ic_beach,
+        R.drawable.ic_cake,
+        R.drawable.ic_camera,
+        R.drawable.ic_cocktail
+    )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroupViewHolder {
         val binding = ItemItemGroupBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -20,12 +28,22 @@ class GroupAdapter(
 
     override fun onBindViewHolder(holder: GroupViewHolder, position: Int) {
         val group = groups[position]
-        holder.binding.tvGroupName.text = group.groupName
+        holder.bind(group)
+        holder.itemView.setOnClickListener { onClick(group) }
+    }
 
-        holder.binding.root.setOnClickListener {
-            onClick(group)
+    override fun getItemCount() = groups.size
+
+    inner class GroupViewHolder(private val binding: ItemItemGroupBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(group: GroupListResponse) {
+            binding.tvGroupName.text = group.groupName
+            binding.ivGroupIcon.setImageResource(getGroupIcon(group))
         }
     }
 
-    override fun getItemCount(): Int = groups.size
+    private fun getGroupIcon(group: GroupListResponse): Int {
+        val hashCode = group.groupId.hashCode()
+        val index = abs(hashCode) % icons.size
+        return icons[index]
+    }
 }
