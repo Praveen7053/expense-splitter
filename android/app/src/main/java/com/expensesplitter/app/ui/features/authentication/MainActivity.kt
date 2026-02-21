@@ -3,19 +3,19 @@ package com.expensesplitter.app.ui.features.authentication
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.expensesplitter.app.databinding.AuthenticationActivityMainBinding
 import com.expensesplitter.app.model.authentication.LoginRequest
 import com.expensesplitter.app.model.authentication.LoginResponse
 import com.expensesplitter.app.model.common.ApiResponse
 import com.expensesplitter.app.network.RetrofitClient
+import com.expensesplitter.app.ui.features.base.BaseActivity
 import com.expensesplitter.app.ui.features.home.HomeActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     private lateinit var binding: AuthenticationActivityMainBinding
 
@@ -37,12 +37,14 @@ class MainActivity : AppCompatActivity() {
 
             val request = LoginRequest(email, password)
 
+            showProgressBar()
             RetrofitClient.getApiService(this).login(request)
                 .enqueue(object : Callback<ApiResponse<LoginResponse>> {
                     override fun onResponse(
                         call: Call<ApiResponse<LoginResponse>>,
                         response: Response<ApiResponse<LoginResponse>>
                     ) {
+                        hideProgressBar()
                         if (response.isSuccessful && response.body()?.success == true) {
                             val token = response.body()?.data?.token
                             val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
@@ -69,6 +71,7 @@ class MainActivity : AppCompatActivity() {
                         call: Call<ApiResponse<LoginResponse>>,
                         t: Throwable
                     ) {
+                        hideProgressBar()
                         Toast.makeText(
                             this@MainActivity,
                             "Error: ${t.message}",

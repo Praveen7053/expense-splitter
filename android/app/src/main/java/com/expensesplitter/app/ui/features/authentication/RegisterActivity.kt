@@ -3,17 +3,17 @@ package com.expensesplitter.app.ui.features.authentication
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.expensesplitter.app.databinding.AuthenticationActivityRegisterBinding
 import com.expensesplitter.app.model.authentication.RegisterRequest
 import com.expensesplitter.app.model.authentication.RegisterResponse
 import com.expensesplitter.app.model.common.ApiResponse
 import com.expensesplitter.app.network.RetrofitClient
+import com.expensesplitter.app.ui.features.base.BaseActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class RegisterActivity : AppCompatActivity() {
+class RegisterActivity : BaseActivity() {
 
     private lateinit var binding: AuthenticationActivityRegisterBinding
 
@@ -30,12 +30,14 @@ class RegisterActivity : AppCompatActivity() {
 
             val request = RegisterRequest(name, email, password)
 
+            showProgressBar()
             RetrofitClient.getApiService(this).register(request)
                 .enqueue(object : Callback<ApiResponse<RegisterResponse>> {
                     override fun onResponse(
                         call: Call<ApiResponse<RegisterResponse>>,
                         response: Response<ApiResponse<RegisterResponse>>
                     ) {
+                        hideProgressBar()
                         Toast.makeText(
                             this@RegisterActivity,
                             "Response code: ${response.code()}",
@@ -67,6 +69,7 @@ class RegisterActivity : AppCompatActivity() {
                         call: Call<ApiResponse<RegisterResponse>>,
                         t: Throwable
                     ) {
+                        hideProgressBar()
                         Toast.makeText(
                             this@RegisterActivity,
                             "Error: ${t.message}",

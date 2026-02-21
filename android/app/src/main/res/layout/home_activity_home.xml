@@ -24,7 +24,7 @@
                 android:text="Expense Splitter"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:textColor="#333333"/>
+                android:textColor="@color/text_primary"/>
 
             <!-- Profile icon -->
             <ImageView
@@ -34,15 +34,14 @@
                 android:background="@drawable/bg_input"
                 android:padding="8dp"
                 android:src="@drawable/ic_person"
-                app:tint="#7E57C2"/>
+                app:tint="@color/purple_500"/>
 
             <!-- Logout icon -->
             <ImageView
                 android:id="@+id/imgLogout"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:src="@drawable/ic_logout"
-                app:tint="#333333"/>
+                android:src="@drawable/ic_logout"/>
         </LinearLayout>
 
         <!-- Fragment Container -->
