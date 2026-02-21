@@ -170,7 +170,7 @@
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
-                android:text="Edit Expense"
+                android:text="Edit"
                 android:textColor="@color/purple_500"
                 android:background="@drawable/bg_button_outline_purple"/>
 
@@ -183,7 +183,7 @@
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
-                android:text="Delete Expense"
+                android:text="Delete"
                 android:textColor="#E53935"
                 android:background="@drawable/bg_button_outline_red"/>
         </LinearLayout>
