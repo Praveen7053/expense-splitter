@@ -13,6 +13,9 @@ import com.expensesplitter.app.model.groups.CreateGroupRequest
 import com.expensesplitter.app.model.groups.GroupListResponse
 import com.expensesplitter.app.model.groups.GroupMemberResponse
 import com.expensesplitter.app.model.expenses.MyBalanceResponse
+import com.expensesplitter.app.model.settlement.CreateSettlementRequest
+import com.expensesplitter.app.model.settlement.SettlementResponse
+import com.expensesplitter.app.model.settlement.SettlementSummaryResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -67,6 +70,8 @@ interface ApiService {
         @Path("groupId") groupId: Long
     ): Call<ApiResponse<List<BalanceResponse>>>
 
+    // ---------------- EXPENSES ----------------
+
     @GET("api/groups/{groupId}/expenses")
     fun getExpenses(
         @Path("groupId") groupId: Long
@@ -96,4 +101,22 @@ interface ApiService {
         @Path("groupId") groupId: Long,
         @Path("expenseId") expenseId: Long
     ): Call<ApiResponse<String>>
+
+    // ---------------- SETTLEMENTS ----------------
+
+    @GET("api/groups/{groupId}/settlements")
+    fun getSettlements(
+        @Path("groupId") groupId: Long
+    ): Call<ApiResponse<List<SettlementResponse>>>
+
+    @POST("api/groups/{groupId}/settlements")
+    fun createSettlement(
+        @Path("groupId") groupId: Long,
+        @Body request: CreateSettlementRequest
+    ): Call<ApiResponse<String>>
+
+    @GET("api/groups/{groupId}/balances/settlement-summary")
+    fun getSettlementSummary(
+        @Path("groupId") groupId: Long
+    ): Call<ApiResponse<List<SettlementSummaryResponse>>>
 }

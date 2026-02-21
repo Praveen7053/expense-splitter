@@ -15,6 +15,8 @@ import com.expensesplitter.app.network.RetrofitClient
 import com.expensesplitter.app.ui.features.expenses.AddExpenseActivity
 import com.expensesplitter.app.ui.features.expenses.ExpenseAdapter
 import com.expensesplitter.app.ui.features.expenses.ExpenseDetailActivity
+import com.expensesplitter.app.ui.features.settlements.SettlementActivity
+import com.expensesplitter.app.ui.features.settlements.SettleUpActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -54,6 +56,18 @@ class GroupDetailsActivity : AppCompatActivity() {
             addIntent.putExtra("GROUP_ID", groupId)
             addIntent.putExtra("GROUP_NAME", groupName)
             startActivity(addIntent)
+        }
+
+        binding.btnSettlements.setOnClickListener { 
+            val intent = Intent(this, SettlementActivity::class.java)
+            intent.putExtra("GROUP_ID", groupId)
+            startActivity(intent)
+        }
+
+        binding.btnSettleUp.setOnClickListener { 
+            val intent = Intent(this, SettleUpActivity::class.java)
+            intent.putExtra("GROUP_ID", groupId)
+            startActivity(intent)
         }
 
         binding.recyclerMembersHorizontal.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)

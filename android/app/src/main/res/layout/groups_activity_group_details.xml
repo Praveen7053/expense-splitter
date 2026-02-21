@@ -78,6 +78,16 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
+        <Button
+            android:id="@+id/btnSettleUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Settle Up"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/cardBalance"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
 
         <!-- 🔹 Members Section -->
         <LinearLayout
@@ -88,7 +98,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:gravity="center_vertical"
-            app:layout_constraintTop_toBottomOf="@id/cardBalance"
+            app:layout_constraintTop_toBottomOf="@id/btnSettleUp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
@@ -100,6 +110,14 @@
                 android:text="Members (6)"
                 android:textSize="16sp"
                 android:textStyle="bold"/>
+
+            <ImageView
+                android:id="@+id/btnSettlements"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/ic_settle"
+                app:tint="#7E57C2"/>
 
             <ImageView
                 android:id="@+id/btnAddMember"

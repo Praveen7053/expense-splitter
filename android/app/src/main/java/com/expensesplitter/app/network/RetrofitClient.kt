@@ -9,29 +9,22 @@ object RetrofitClient {
 
     private const val BASE_URL = "http://192.168.1.9:8080/"
 
+    private var apiService: ApiService? = null
+
     fun getApiService(context: Context): ApiService {
+        if (apiService == null) {
+            val client = OkHttpClient.Builder()
+                .addInterceptor(AuthInterceptor(context))
+                .build()
 
-        val sharedPref = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-        val token = sharedPref.getString("token", null)
+            val retrofit = Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
 
-        val client = OkHttpClient.Builder()
-            .addInterceptor { chain ->
-                val requestBuilder = chain.request().newBuilder()
-
-                if (token != null) {
-                    requestBuilder.addHeader("Authorization", "Bearer $token")
-                }
-
-                chain.proceed(requestBuilder.build())
-            }
-            .build()
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .client(client)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        return retrofit.create(ApiService::class.java)
+            apiService = retrofit.create(ApiService::class.java)
+        }
+        return apiService!!
     }
 }
