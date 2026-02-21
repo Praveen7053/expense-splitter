@@ -1,5 +1,6 @@
 package com.expensesplitter.app.ui.features.settlements
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -26,6 +27,11 @@ class SettlementActivity : AppCompatActivity() {
         fetchSettlements()
 
         binding.btnBack.setOnClickListener { finish() }
+        binding.fabSettleUp.setOnClickListener {
+            val intent = Intent(this, SettleUpActivity::class.java)
+            intent.putExtra("GROUP_ID", groupId)
+            startActivity(intent)
+        }
     }
 
     private fun setupRecyclerView() {
