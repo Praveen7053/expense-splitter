@@ -34,9 +34,10 @@
         <activity android:name=".ui.features.groups.AddMemberActivity" />
         <activity android:name=".ui.features.expenses.AddExpenseActivity" />
         <activity android:name=".ui.features.expenses.ExpenseDetailActivity" />
-        <activity android:name=".ui.features.settlements.SettlementActivity" />
+        <activity android:name=".ui.features.settlements.SettlementHistoryActivity" />
         <activity android:name=".ui.features.settlements.AddSettlementActivity" />
         <activity android:name=".ui.features.settlements.SettleUpActivity" />
+        <activity android:name=".ui.features.settlements.SettlementActivity" />
     </application>
 
 </manifest>
