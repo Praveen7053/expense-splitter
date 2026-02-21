@@ -15,13 +15,13 @@
         android:theme="@style/Theme.ExpenseSplitter"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".RegisterActivity"
+            android:name=".ui.features.authentication.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".HomeActivity"
+            android:name=".ui.features.home.HomeActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.features.authentication.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,11 +29,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CreateGroupActivity" />
-        <activity android:name=".GroupDetailsActivity" />
-        <activity android:name=".AddMemberActivity" />
-        <activity android:name=".AddExpenseActivity" />
-        <activity android:name=".ExpenseDetailActivity" />
+        <activity android:name=".ui.features.groups.CreateGroupActivity" />
+        <activity android:name=".ui.features.groups.GroupDetailsActivity" />
+        <activity android:name=".ui.features.groups.AddMemberActivity" />
+        <activity android:name=".ui.features.expenses.AddExpenseActivity" />
+        <activity android:name=".ui.features.expenses.ExpenseDetailActivity" />
     </application>
 
 </manifest>

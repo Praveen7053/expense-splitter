@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">ExpenseSplitter</string>
+    <string name="expense_amount">₹%s</string>
+    <string name="paid_by_and_members">Paid by %s • %d members</string>
+    <string name="you_get">You get %s</string>
+    <string name="you_owe">You owe %s</string>
+    <string name="settled">Settled</string>
 </resources>

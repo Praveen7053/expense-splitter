@@ -20,4 +20,8 @@
 
     <color name="text_positive">#2ECC71</color>
     <color name="text_negative">#E74C3C</color>
+
+    <color name="balance_positive">#2E7D32</color>
+    <color name="balance_negative">#E53935</color>
+    <color name="balance_settled">#9E9E9E</color>
 </resources>
